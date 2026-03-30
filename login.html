@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
+<title>LEPhone</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{height:100%;background:#000;display:flex;align-items:center;justify-content:center;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Helvetica Neue',sans-serif;overflow:hidden;}
+
+.wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;width:100%;max-width:360px;padding:0 32px;opacity:0;transform:scale(0.88);transition:opacity 0.6s cubic-bezier(0.34,1.56,0.64,1),transform 0.6s cubic-bezier(0.34,1.56,0.64,1);}
+.wrap.show{opacity:1;transform:scale(1);}
+
+.logo-img{width:90px;height:90px;object-fit:contain;filter:drop-shadow(0 8px 24px rgba(173,216,230,0.3));}
+.logo-title{font-size:14px;font-weight:300;color:rgba(255,255,255,0.4);letter-spacing:6px;margin-top:10px;}
+.logo-sub{font-size:11px;color:rgba(255,255,255,0.2);letter-spacing:1.5px;margin-top:12px;line-height:1.8;text-align:center;}
+
+.divider{width:40px;height:1px;background:rgba(255,255,255,0.1);margin:32px 0;}
+
+.tabs{display:flex;gap:24px;margin-bottom:28px;}
+.tab{font-size:13px;color:rgba(255,255,255,0.3);cursor:pointer;letter-spacing:1px;padding-bottom:4px;border-bottom:1px solid transparent;transition:all 0.2s;}
+.tab.active{color:rgba(255,255,255,0.8);border-bottom-color:rgba(255,255,255,0.4);}
+
+.form{width:100%;display:flex;flex-direction:column;gap:14px;}
+.input-wrap{position:relative;}
+.input-wrap input{width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:13px 16px;font-size:14px;color:rgba(255,255,255,0.85);outline:none;transition:border 0.2s;letter-spacing:0.5px;}
+.input-wrap input::placeholder{color:rgba(255,255,255,0.2);}
+.input-wrap input:focus{border-color:rgba(255,255,255,0.3);}
+
+.key-box{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:14px 16px;display:none;}
+.key-box .key-label{font-size:11px;color:rgba(255,255,255,0.3);letter-spacing:1px;margin-bottom:8px;}
+.key-box .key-value{font-size:13px;color:rgba(173,216,230,0.9);font-family:monospace;word-break:break-all;line-height:1.6;}
+.key-box .key-tip{font-size:11px;color:rgba(255,255,255,0.2);margin-top:8px;line-height:1.6;}
+
+.btn{width:100%;padding:13px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:10px;font-size:14px;color:rgba(255,255,255,0.7);cursor:pointer;letter-spacing:1px;transition:all 0.2s;margin-top:4px;}
+.btn:active{background:rgba(255,255,255,0.12);}
+.btn:disabled{opacity:0.3;cursor:not-allowed;}
+
+.msg{text-align:center;font-size:12px;min-height:16px;margin-top:4px;letter-spacing:0.5px;color:rgba(255,100,100,0.8);}
+.msg.ok{color:rgba(100,200,150,0.8);}
+
+.footer{position:fixed;bottom:48px;display:flex;flex-direction:column;align-items:center;gap:10px;opacity:0;transition:opacity 0.4s ease;}
+.footer.show{opacity:1;}
+.progress-bar{width:36px;height:3px;border-radius:2px;background:rgba(255,255,255,0.1);overflow:hidden;}
+.progress-fill{height:100%;width:0%;background:linear-gradient(90deg,#b8d4e8,#daeaf5);border-radius:2px;transition:width 0.3s ease;}
+.footer-text{font-size:10px;color:rgba(255,255,255,0.2);letter-spacing:2px;}
+</style>
+</head>
+<body>
+
+<div class="wrap" id="wrap">
+  <img src="./icon-lephone.png" class="logo-img" alt="LEPhone">
+  <div class="logo-title">LEPhone</div>
+  <div class="logo-sub">别让虚拟的温柔，<br>偷走了你在现实里本该拥有的温暖</div>
+  <div class="divider"></div>
+
+  <div class="tabs">
+    <div class="tab active" id="tab-login" onclick="switchTab('login')">登录</div>
+    <div class="tab" id="tab-reg" onclick="switchTab('reg')">首次使用</div>
+  </div>
+
+  <div id="panel-login" class="form">
+    <div class="input-wrap"><input type="number" id="login-qq" placeholder="QQ 号"></div>
+    <div class="input-wrap"><input type="text" id="login-key" placeholder="密钥"></div>
+    <button class="btn" id="login-btn" onclick="doLogin()">进入</button>
+    <div class="msg" id="login-msg"></div>
+  </div>
+
+  <div id="panel-reg" class="form" style="display:none;">
+    <div class="input-wrap"><input type="number" id="reg-qq" placeholder="QQ 号"></div>
+    <div class="key-box" id="reg-key-box">
+      <div class="key-label">专属密钥 · 请截图保存</div>
+      <div class="key-value" id="reg-key-value"></div>
+      <div class="key-tip">此密钥只显示一次，下次登录需要用到</div>
+    </div>
+    <button class="btn" id="reg-btn" onclick="doRegister()">获取密钥</button>
+    <div class="msg" id="reg-msg"></div>
+  </div>
+</div>
+
+<div class="footer" id="footer">
+  <div class="progress-bar"><div class="progress-fill" id="progress"></div></div>
+  <div class="footer-text">正在验证</div>
+</div>
+
+<script>
+const WORKER_URL = 'https://lephone.lingsha156.workers.dev';
+
+function getDeviceId() {
+  let id = localStorage.getItem('lephone_device_id');
+  if (!id) {
+    id = 'dev_' + Date.now() + '_' + Math.random().toString(36).slice(2, 10);
+    localStorage.setItem('lephone_device_id', id);
+  }
+  return id;
+}
+
+function switchTab(tab) {
+  document.getElementById('panel-login').style.display = tab === 'login' ? 'flex' : 'none';
+  document.getElementById('panel-reg').style.display = tab === 'reg' ? 'flex' : 'none';
+  document.getElementById('tab-login').classList.toggle('active', tab === 'login');
+  document.getElementById('tab-reg').classList.toggle('active', tab === 'reg');
+}
+
+function setProgress(p) {
+  document.getElementById('progress').style.width = p + '%';
+}
+
+function enterApp() {
+  setProgress(100);
+  setTimeout(() => { window.location.href = './index.html'; }, 600);
+}
+
+async function autoLogin() {
+  const qq = localStorage.getItem('lephone_qq');
+  const deviceId = getDeviceId();
+  if (!qq) return false;
+  try {
+    const resp = await fetch(WORKER_URL + '/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ qq, deviceId }) });
+    const data = await resp.json();
+    if (data.ok && data.auto) return true;
+  } catch (e) {}
+  return false;
+}
+
+async function doLogin() {
+  const qq = document.getElementById('login-qq').value.trim();
+  const key = document.getElementById('login-key').value.trim();
+  const msg = document.getElementById('login-msg');
+  const btn = document.getElementById('login-btn');
+  if (!qq || !key) { msg.className = 'msg'; msg.textContent = '请填写完整'; return; }
+  btn.disabled = true;
+  document.getElementById('footer').classList.add('show');
+  setProgress(40);
+  try {
+    const resp = await fetch(WORKER_URL + '/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ qq, key, deviceId: getDeviceId() }) });
+    const data = await resp.json();
+    setProgress(80);
+    if (data.ok) {
+      localStorage.setItem('lephone_qq', qq);
+      localStorage.setItem('lephone_key', key);
+      msg.className = 'msg ok'; msg.textContent = '验证成功';
+      enterApp();
+    } else {
+      msg.className = 'msg'; msg.textContent = data.msg || '验证失败';
+      setProgress(0); document.getElementById('footer').classList.remove('show');
+      btn.disabled = false;
+    }
+  } catch (e) {
+    msg.className = 'msg'; msg.textContent = '网络错误，请重试';
+    setProgress(0); document.getElementById('footer').classList.remove('show');
+    btn.disabled = false;
+  }
+}
+
+async function doRegister() {
+  const qq = document.getElementById('reg-qq').value.trim();
+  const msg = document.getElementById('reg-msg');
+  const btn = document.getElementById('reg-btn');
+  if (!qq || !/^\d{5,12}$/.test(qq)) { msg.className = 'msg'; msg.textContent = '请输入正确的 QQ 号'; return; }
+  btn.disabled = true;
+  document.getElementById('footer').classList.add('show');
+  setProgress(40);
+  try {
+    const resp = await fetch(WORKER_URL + '/register', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ qq }) });
+    const data = await resp.json();
+    setProgress(80);
+    if (data.ok) {
+      document.getElementById('reg-key-value').textContent = data.key;
+      document.getElementById('reg-key-box').style.display = 'block';
+      localStorage.setItem('lephone_qq', qq);
+      localStorage.setItem('lephone_key', data.key);
+      const deviceId = getDeviceId();
+      await fetch(WORKER_URL + '/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ qq, key: data.key, deviceId }) });
+      msg.className = 'msg ok';
+      msg.textContent = data.isNew ? '密钥已生成，请保存' : '欢迎回来，密钥已找回';
+      btn.textContent = '进入 LEPhone';
+      btn.disabled = false;
+      btn.onclick = () => enterApp();
+    } else {
+      msg.className = 'msg'; msg.textContent = data.msg || '获取失败';
+      setProgress(0); document.getElementById('footer').classList.remove('show');
+      btn.disabled = false;
+    }
+  } catch (e) {
+    msg.className = 'msg'; msg.textContent = '网络错误，请重试';
+    setProgress(0); document.getElementById('footer').classList.remove('show');
+    btn.disabled = false;
+  }
+}
+
+window.addEventListener('load', async () => {
+  setTimeout(() => { document.getElementById('wrap').classList.add('show'); }, 100);
+  const qq = localStorage.getItem('lephone_qq');
+  const key = localStorage.getItem('lephone_key');
+  if (qq) {
+    document.getElementById('footer').classList.add('show');
+    setProgress(30);
+    const ok = await autoLogin();
+    if (ok) { enterApp(); return; }
+    setProgress(0);
+    document.getElementById('footer').classList.remove('show');
+  }
+  if (qq) document.getElementById('login-qq').value = qq;
+  if (key) document.getElementById('login-key').value = key;
+});
+</script>
+</body>
+</html>
