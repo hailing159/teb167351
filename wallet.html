@@ -911,7 +911,7 @@ async function submitPowCheckin() {
   await saveSetting('checkin', {streak:newStreak, lastDate:today, totalDays:newTotal, history});
   const record = {id:'checkin_'+Date.now(), walletType:'virtual', type:'income', amount:reward, note:`签到奖励（${cfg.label}）`, category:'签到奖励', timestamp:Date.now()};
   await addRecord(record);
-  try{const req=indexedDB.open('GeminiChatDB');req.onsuccess=e=>{const gdb=e.target.result;if(!gdb.objectStoreNames.contains('transactionRecords'))return;const tx=gdb.transaction('transactionRecords','readwrite');const mainRecord={id:'checkin_main_'+Date.now()+'_'+Math.random().toString(36).substr(2,5),chatId:'',type:'income',amount:reward,tax:0,actualAmount:reward,charName:'钱包签到',avatar:'',description:`每日签到奖励（${cfg.label}）连续第${newStreak}天`,timestamp:Date.now(),isGroup:false,noTax:true};tx.objectStore('transactionRecords').add(mainRecord);};}catch(e){}
+  try{const req=indexedDB.open('GeminiChatDB',190);req.onsuccess=e=>{const gdb=e.target.result;if(!gdb.objectStoreNames.contains('transactionRecords'))return;const tx=gdb.transaction('transactionRecords','readwrite');const mainRecord={id:'checkin_main_'+Date.now()+'_'+Math.random().toString(36).substr(2,5),chatId:'',type:'income',amount:reward,tax:0,actualAmount:reward,charName:'钱包签到',avatar:'',description:`每日签到奖励（${cfg.label}）连续第${newStreak}天`,timestamp:Date.now(),isGroup:false,noTax:true};tx.objectStore('transactionRecords').add(mainRecord);};req.onerror=e=>console.warn('写入主文件签到记录失败',e);}catch(e){console.warn(e);}
   closePowModal();
   await refreshAllViews();
   await updateCheckinUI();
