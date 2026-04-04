@@ -257,7 +257,6 @@ body.dark .pow-submit-btn:disabled{background:#333;color:#555;}
 <!-- ===== 顶部 Header ===== -->
 <div class="wl-header">
 <span class="wl-header-title" id="wallet-title" onclick="if(window.parent&&window.parent!==window)window.parent.postMessage({type:'close-wallet'},'*');" style="cursor:pointer;">真实钱包</span>
-<button onclick="if(window.parent&&window.parent!==window)window.parent.postMessage({type:'close-wallet'},'*');" style="background:none;border:none;cursor:pointer;font-size:20px;color:#666;padding:4px;margin-right:4px;"><i class="fa-solid fa-arrow-left"></i></button>
 <button class="wl-switch-btn" id="wallet-switch-btn" onclick="toggleWalletDropdown()">
 <i class="fa-solid fa-repeat"></i>切换钱包
 </button>
@@ -912,6 +911,7 @@ async function submitPowCheckin() {
   await saveSetting('checkin', {streak:newStreak, lastDate:today, totalDays:newTotal, history});
   const record = {id:'checkin_'+Date.now(), walletType:'virtual', type:'income', amount:reward, note:`签到奖励（${cfg.label}）`, category:'签到奖励', timestamp:Date.now()};
   await addRecord(record);
+  try{const req=indexedDB.open('GeminiChatDB');req.onsuccess=e=>{const gdb=e.target.result;if(!gdb.objectStoreNames.contains('transactionRecords'))return;const tx=gdb.transaction('transactionRecords','readwrite');const mainRecord={id:'checkin_main_'+Date.now()+'_'+Math.random().toString(36).substr(2,5),chatId:'',type:'income',amount:reward,tax:0,actualAmount:reward,charName:'钱包签到',avatar:'',description:`每日签到奖励（${cfg.label}）连续第${newStreak}天`,timestamp:Date.now(),isGroup:false,noTax:true};tx.objectStore('transactionRecords').add(mainRecord);};}catch(e){}
   closePowModal();
   await refreshAllViews();
   await updateCheckinUI();
