@@ -16,6 +16,8 @@ self.addEventListener('activate', event => {
   );
 });
 
+self.addEventListener('notificationclick', event => {event.notification.close();const chatId=event.notification.data&&event.notification.data.chatId;event.waitUntil(self.clients.matchAll({type:'window',includeUncontrolled:true}).then(clients=>{const client=clients.find(c=>c.visibilityState==='visible')||clients[0];if(client){client.focus();if(chatId)client.postMessage({type:'open_chat',chatId:chatId});return;}return self.clients.openWindow('./').then(newClient=>{if(newClient&&chatId){setTimeout(()=>newClient.postMessage({type:'open_chat',chatId:chatId}),1500);}});}).catch(()=>{}));});
+
 self.addEventListener('fetch', event => {
   if (event.request.method !== 'GET') return;
   event.respondWith(
