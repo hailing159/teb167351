@@ -1,4 +1,4 @@
-const CACHE_NAME = 'lephone-v9';
+const CACHE_NAME = 'lephone-v10';
 const CACHE_URLS = ['./'];
 
 self.addEventListener('install', event => {
@@ -22,9 +22,13 @@ self.addEventListener('fetch', event => {
   if (event.request.method !== 'GET') return;
   const reqUrl = new URL(event.request.url);
   if (reqUrl.origin !== self.location.origin) return;
+  const dest = event.request.destination;
+  const allowedDest = ['document','script','style','image','font','manifest','worker','audio','video','track'];
+  if (dest && !allowedDest.includes(dest)) return;
+  if (event.request.cache === 'only-if-cached' && event.request.mode !== 'same-origin') return;
   event.respondWith(
     fetch(event.request).then(response => {
-      if (response && response.status === 200) {
+      if (response && response.status === 200 && response.type === 'basic') {
         const clone = response.clone();
         caches.open(CACHE_NAME).then(cache => cache.put(event.request, clone));
       }
