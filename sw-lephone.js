@@ -21,6 +21,7 @@ self.addEventListener('notificationclick', event => {event.notification.close();
 self.addEventListener('fetch', event => {
   if (event.request.method !== 'GET') return;
   const reqUrl = new URL(event.request.url);
+  if (reqUrl.protocol === 'blob:' || reqUrl.protocol === 'data:') return;
   if (reqUrl.origin !== self.location.origin) return;
   const dest = event.request.destination;
   const allowedDest = ['document','script','style','image','font','manifest','worker','audio','video','track'];
