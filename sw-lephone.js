@@ -20,6 +20,8 @@ self.addEventListener('notificationclick', event => {event.notification.close();
 
 self.addEventListener('fetch', event => {
   if (event.request.method !== 'GET') return;
+  const reqUrl = new URL(event.request.url);
+  if (reqUrl.origin !== self.location.origin) return;
   event.respondWith(
     fetch(event.request).then(response => {
       if (response && response.status === 200) {
@@ -27,6 +29,6 @@ self.addEventListener('fetch', event => {
         caches.open(CACHE_NAME).then(cache => cache.put(event.request, clone));
       }
       return response;
-    }).catch(() => caches.match(event.request))
+    }).catch(() => caches.match(event.request).then(cached => cached || new Response('', { status: 504, statusText: 'Offline' })))
   );
 });
