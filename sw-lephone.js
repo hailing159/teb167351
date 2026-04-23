@@ -1,4 +1,4 @@
-const CACHE_NAME = 'lephone-v8';
+const CACHE_NAME = 'lephone-v9';
 const CACHE_URLS = ['./'];
 
 self.addEventListener('install', event => {
