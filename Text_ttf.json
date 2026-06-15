@@ -1,0 +1,79 @@
+{
+    "lastUpdated": "2025-06-11",
+    "version": "1.1",
+    "websites": [
+        {
+            "name": "ZeoSeven Fonts",
+            "url": "https://fonts.zeoseven.com/",
+            "description": "提供“@import url(...result.css)” + body {font-family:...} 的在线字体调用格式，支持中英文字体。",
+            "category": "CSS @import(result.css)"
+        },
+        {
+            "name": "苍耳字体",
+            "url": "https://www.tsanger.cn/",
+            "description": "高质量中文字体，TTF 文件免费下载。",
+            "category": "TTF 免费下载"
+        },
+        {
+            "name": "DOANY 字体集",
+            "url": "https://font.doany.cn/",
+            "description": "汇集多款免费中文字体，提供 TTF/OFT 下载。",
+            "category": "TTF 免费下载"
+        },
+        {
+            "name": "站长字体网",
+            "url": "https://m.fonts.net.cn/",
+            "description": "收录大量可免费下载的中文 TTF 字体。",
+            "category": "TTF 免费下载"
+        },
+        {
+            "name": "字魂字库",
+            "url": "https://zihunziku.com/",
+            "description": "多样化中文字体，部分字体支持免费 TTF 下载。",
+            "category": "TTF 免费下载"
+        },
+        {
+            "name": "字体家",
+            "url": "https://www.zitijia.com/",
+            "description": "中文字体门户，提供 TTF 文件免费下载与预览。",
+            "category": "TTF 免费下载"
+        },
+        {
+            "name": "FontSpace 英文字体",
+            "url": "https://www.fontspace.com/new/fonts",
+            "description": "海量英文字体，支持 TTF 下载，按新近发布排序。",
+            "category": "英文字体 TTF"
+        },
+        {
+            "name": "Google Fonts",
+            "url": "https://fonts.google.com/",
+            "description": "提供 <style>@import url('...display=swap')</style> 格式的在线英文字体调用，可选子集与字重。",
+            "category": "CSS @import(display=swap)"
+        },
+        {
+                "name": "字体传奇网",
+                    "url": "https://www.mfonts.cn/",
+                        "description": "提供多种中文字体下载，支持个人及商业用途，部分字体可免费下载 TTF。",
+                            "category": "TTF 免费下载"
+                            },
+                            {
+    "name": "字体天下（手机版）",
+    "url": "https://m.fonts.net.cn/",
+    "description": "提供简繁中文字体免费下载，支持 TTF 格式，适合手机端访问。",
+    "category": "TTF 免费下载"
+},
+{
+    "name": "100字体网",
+    "url": "https://www.100font.com/",
+    "description": "提供大量中文字体免费下载，包含多种字体格式，界面简洁，适合直接访问。请注意访问时需要关闭梯子（VPN）以保证正常加载和下载。",
+    "category": "TTF 免费下载",
+    "remark": "如果无法访问时请关闭梯子（VPN），否则可能无法正常打开或下载。"
+},
+{
+    "name": "MODI.JPN（日文字体）",
+    "url": "https://modi.jpn.org/",
+    "description": "收录丰富的日文字体资源，包括开源与商用字体，适合日语排版与设计使用。",
+    "category": "日文字体资源"
+}
+    ]
+}
