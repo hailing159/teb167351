@@ -112,7 +112,8 @@ window.globalCssHtmlRefs=[['聊天列表',`<div id="chat-list-screen" class="scr
 
 /* 转发 / 删除按钮字号统一 */
 #chat-interface-screen.selection-mode #selection-forward-btn,
-#chat-interface-screen.selection-mode #selection-delete-btn {
+#chat-interface-screen.selection-mode #selection-delete-btn,
+#chat-interface-screen.selection-mode #selection-favorite-btn {
     font-size: 14px !important;
 }
 
@@ -289,8 +290,7 @@ html body #chat-input-area #chat-input {
     padding-top: 8px !important;     /* 上 */  
     padding-bottom: 0px !important;     /* 下*/    
     padding-right: 0px !important;   /* 右 */
-}
-`],
+}`],
 ['顶部栏和底部栏美化css',`/* 顶部栏固定透明化 */
 #chat-interface-screen .header {
   position: fixed !important;
