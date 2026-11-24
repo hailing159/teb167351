@@ -329,4 +329,32 @@ html body #chat-input-area #chat-input {
   padding: 60px 15px 80px 15px !important;/*上左下右*/
   margin: 0 !important;
   box-sizing: border-box !important;
-}`]];
+}`],
+['全局变量（名字和头像）',`/* ===== 全局变量说明 ===== */
+/* 进入聊天后可用，写在 :root 上，所有页面的 CSS 都能用
+
+   --char-name     角色名字（有备注名时是备注名，群聊是群名）
+   --user-name     用户名字
+   --char-avatar   角色头像（群聊是群头像）
+   --user-avatar   用户头像
+
+   名字用在 content，头像用在 background-image
+   例：content: var(--char-name);
+   例：background-image: var(--char-avatar);
+
+   注意：聊天列表里每一项各有各的名字，不能用这些变量
+   备注名修改后，需重新进入聊天才会更新
+*/
+
+/* ===== 示例：顶部栏显示角色头像和名字 ===== */
+/*
+#chat-header-title{font-size:0!important;}
+#chat-header-title::before{content:"";display:inline-block;width:24px;height:24px;border-radius:50%;background-image:var(--char-avatar);background-size:cover;vertical-align:middle;margin-right:6px;}
+#chat-header-title::after{content:var(--char-name);font-size:16px;vertical-align:middle;}
+*/
+
+/* ===== 示例：右上角显示用户头像 ===== */
+/*
+#chat-settings-btn::before{content:"";display:block;width:26px;height:26px;border-radius:50%;background-image:var(--user-avatar);background-size:cover;}
+#chat-settings-btn img{display:none!important;}
+*/`]];
